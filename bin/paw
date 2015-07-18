@@ -1,0 +1,21 @@
+#!/usr/bin/perl
+package bin::paw;
+use Moo;
+
+has config => (
+    is => "ro",
+    isa => sub {
+        die "no such file: $_[0]" unless -f $_[0];
+    },
+    default => "pawfile"
+);
+
+sub run {
+    my $self = shift;
+
+    my $engine = require($self->config) or die "cannot parse: " . $self->config;
+    print "Running paws\n";
+    $engine->run;
+}
+
+__PACKAGE__->new->run;
